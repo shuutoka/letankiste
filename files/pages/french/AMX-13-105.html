@@ -83,14 +83,13 @@
         .close-button {
             margin-top: 10px;
             padding: 5px 10px; /* Smaller close button */
-            margin-left: 500px;
-            margin-right: 500px;
             background-color: transparent;
             color: cyan;
             border: 1px solid cyan;
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px; /* Adjust the font size as needed */
+            position: relative; /* Add this line to allow pseudo-element positioning */
         }
 
         .close-button:hover {
@@ -116,7 +115,19 @@
             text-align: right;
         }
 
-        
+        /* Media query for small screens (e.g., phones) */
+        @media screen and (max-width: 768px) {
+            .close-button::after {
+                position: absolute; /* Position the pseudo-element */
+                top: 50%; /* Center vertically */
+                left: 50%; /* Center horizontally */
+                transform: translate(-50%, -50%); /* Center the 'X' */
+            }
+
+            .close-button:hover::after {
+                content: 'X'; /* Hide the pseudo-element on hover */
+            }
+        }
     </style>
 </head>
 <body>
@@ -199,4 +210,5 @@
             document.getElementById('ratingBox').style.display = 'none';
         }
     </script>
+</body>
 </html>
