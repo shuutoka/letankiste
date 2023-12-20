@@ -13,7 +13,151 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap">
     <title>Le Tankiste - Tank Filter</title>
     <style>
-        /* Add your styles here */
+        body {
+            background-color: black;
+            color: cyan;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        select {
+            width: 150px;
+            padding: 5px;
+            border: 1px solid cyan;
+            border-radius: 13px;
+            margin-bottom: 10px;
+            color: cyan;
+            background-color: black;
+        }
+
+        #overview {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        #overview div {
+            background-color: black;
+            color: cyan;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid cyan;
+            border-radius: 13px;
+            text-align: center;
+        }
+
+        #overview img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        #noResultsMessage {
+            text-align: center;
+            color: cyan;
+            margin-top: 20px;
+        }
+
+        a {
+            color: cyan;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 600px) {
+            select {
+                width: 100%;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+            }
+        }
+
+        button {
+            padding: 8px 16px;
+            border: 1px solid cyan;
+            border-radius: 13px;
+            background-color: black;
+            color: cyan;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .page-link {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: 1px solid cyan;
+            border-radius: 13px;
+            color: cyan;
+            cursor: pointer;
+        }
+
+        .page-link:hover {
+            background-color: cyan;
+            color: black;
+        }
+
+        /* Neon border with color rotation on hover */
+        .tank-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tank-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, cyan, pink);
+            border-radius: 13px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tank-card:hover::before {
+            opacity: 1;
+            animation: neon-border 1.5s linear infinite;
+        }
+
+        @keyframes neon-border {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Change cursor to pointer on hover */
+        .tank-card:hover {
+            cursor: pointer;
+        }
+</style>
+
     </style>
 </head>
 <body>
@@ -40,15 +184,23 @@
         <option value="">All</option>
     </select>
 
+    <button id="resetButton">Reset</button>
+
     <div id="overview">
         <!-- Tank overview will be displayed here -->
     </div>
+
+    <div id="noResultsMessage"></div>
+
+    <div class="pagination" id="pagination"></div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script>
         // CSV URL
         const csvUrl = 'https://shuutoka.github.io/letankiste/files/tankiste-db.csv';
+        // Number of results per page
+        const resultsPerPage = 10;
 
         // Function to fetch and parse CSV data
         function fetchTankData() {
@@ -77,20 +229,29 @@
             }, []);
 
             const dropdown = $(`#${dropdownId}`);
+            const selectedValue = dropdown.val(); // Preserve the selected value
             dropdown.empty();
             dropdown.append('<option value="">All</option>');
 
             options.forEach(option => {
                 dropdown.append(`<option value="${option}">${option}</option>`);
             });
+
+            // Set the preserved value if it exists
+            if (selectedValue) {
+                dropdown.val(selectedValue);
+            }
         }
 
-        // Function to update tank overview based on selected filters
-        function updateOverview() {
+        // Function to update tank overview based on selected filters and page number
+        function updateOverview(pageNumber) {
             const selectedNation = $('#nation').val();
             const selectedTier = $('#tier').val();
             const selectedClass = $('#class').val();
             const selectedStatus = $('#status').val();
+
+            const startIndex = (pageNumber - 1) * resultsPerPage;
+            const endIndex = startIndex + resultsPerPage;
 
             const filteredTanks = tankData.filter(tank =>
                 (!selectedNation || tank.Nation === selectedNation) &&
@@ -99,18 +260,50 @@
                 (!selectedStatus || tank.Statue === selectedStatus)
             );
 
+            const paginatedTanks = filteredTanks.slice(startIndex, endIndex);
+
             const overview = $('#overview');
             overview.empty();
 
-            filteredTanks.forEach(tank => {
-                overview.append(`
-                    <div>
-                        <h2>${tank.name}</h2>
-                        <img src="${tank.icon}" alt="${tank.name} icon">
-                        <a href="${tank.URL}" target="_blank">Learn more</a>
-                    </div>
-                `);
-            });
+            if (paginatedTanks.length === 0) {
+                $('#noResultsMessage').text('No tanks found or articles not ready yet.');
+            } else {
+                $('#noResultsMessage').text('');
+                paginatedTanks.forEach(tank => {
+                    const tankCard = $(`
+                        <div class="tank-card">
+                            <h2>${tank.name}</h2>
+                            <img src="${tank.icon}" alt="${tank.name} icon">
+                        </div>
+                    `);
+
+                    // Make the entire card clickable
+                    tankCard.click(() => {
+                        window.open(tank.URL, '_blank');
+                    });
+
+                    overview.append(tankCard);
+                });
+            }
+
+            // Update pagination controls
+            updatePaginationControls(filteredTanks.length, pageNumber);
+        }
+
+        // Function to update pagination controls
+        function updatePaginationControls(totalResults, currentPage) {
+            const totalPages = Math.ceil(totalResults / resultsPerPage);
+            const pagination = $('#pagination');
+            pagination.empty();
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLink = $(`<span class="page-link">${i}</span>`);
+                pageLink.click(() => updateOverview(i));
+                if (i === currentPage) {
+                    pageLink.addClass('active');
+                }
+                pagination.append(pageLink);
+            }
         }
 
         // Event listeners for dropdown changes
@@ -118,11 +311,33 @@
             populateDropdown(tankData, 'Tier', 'tier');
             populateDropdown(tankData, 'Class', 'class');
             populateDropdown(tankData, 'Statue', 'status');
-            updateOverview();
+            updateOverview(1); // Reset to page 1 when filters change
         });
 
-        $('#tier, #class, #status').change(function () {
-            updateOverview();
+        $('#tier').change(function () {
+            populateDropdown(tankData, 'Class', 'class');
+            populateDropdown(tankData, 'Statue', 'status');
+            updateOverview(1); // Reset to page 1 when filters change
+        });
+
+        $('#class').change(function () {
+            populateDropdown(tankData, 'Statue', 'status');
+            updateOverview(1); // Reset to page 1 when filters change
+        });
+
+        $('#status').change(function () {
+            updateOverview(1); // Reset to page 1 when filters change
+        });
+
+        // Reset button click event
+        $('#resetButton').click(function () {
+            // Reset all dropdowns to default
+            $('#nation, #tier, #class, #status').val('');
+            // Repopulate dropdowns based on the default
+            populateDropdown(tankData, 'Tier', 'tier');
+            populateDropdown(tankData, 'Class', 'class');
+            populateDropdown(tankData, 'Statue', 'status');
+            updateOverview(1); // Reset to page 1 when reset button is clicked
         });
 
         // Fetch tank data and initialize dropdowns
@@ -133,7 +348,7 @@
             populateDropdown(tankData, 'Tier', 'tier');
             populateDropdown(tankData, 'Class', 'class');
             populateDropdown(tankData, 'Statue', 'status');
-            updateOverview();
+            updateOverview(1); // Load page 1 initially
         }).catch(error => {
             console.error('Error fetching tank data:', error);
         });
