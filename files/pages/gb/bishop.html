@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="MITTLERER KPZ. PR. 68 (P)">
+    <meta property="og:description" content="Tanks informations and history">
+    <meta property="og:image" content="https://shuutoka.github.io/letankiste/files/images/thumbnail/bishop.png">
+    <meta property="og:url" content="https://shuutoka.github.io/letankiste/index.html#">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="https://shuutoka.github.io/letankiste/files/styles/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap">
+    <title>Amx 13 105</title>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            background: #000;
+        }
+
+        .background {
+            text-align: center;
+        }
+
+        .vehicle-info {
+            display: inline-block;
+            text-align: left;
+        }
+
+        .title-and-image {
+            text-align: center;
+        }
+
+        .title-and-image img {
+            width: 350%; /* Resize the image by 350% */
+            max-width: 100%; /* Ensure the image doesn't exceed the container */
+        }
+
+        .star-rating {
+            text-align: center;
+            margin-top: 10px; /* Adjust the margin as needed */
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .neon-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid cyan;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 50px;
+            font-size: 20px;
+        }
+
+        .neon-button:hover {
+            transform: scale(1.1);
+            box-shadow: 10px 10px 50px cyan;
+        }
+
+        .white-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgb(0, 0, 0);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid cyan;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            z-index: 2;
+            width: 80%; /* Adjust the width as needed */
+        }
+
+        .close-button {
+            margin-top: 10px;
+            padding: 5px 10px; /* Smaller close button */
+            background-color: transparent;
+            color: cyan;
+            border: 1px solid cyan;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px; /* Adjust the font size as needed */
+            position: relative; /* Add this line to allow pseudo-element positioning */
+        }
+
+        .close-button:hover {
+            background-color: cyan;
+            color: black;
+        }
+
+        .rating-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .rating-label {
+            flex: 1;
+            text-align: left;
+            margin-right: 10px;
+        }
+
+        .star-container {
+            flex: 2;
+            text-align: right;
+        }
+
+        /* Media query for small screens (e.g., phones) */
+        @media screen and (max-width: 768px) {
+            .close-button::after {
+                position: absolute; /* Position the pseudo-element */
+                top: 50%; /* Center vertically */
+                left: 50%; /* Center horizontally */
+                transform: translate(-50%, -50%); /* Center the 'X' */
+            }
+
+            .close-button:hover::after {
+                content: 'X'; /* Hide the pseudo-element on hover */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <h2>Le tankiste</h2>
+
+        <!-- Vehicle Info -->
+        <div class="vehicle-info">
+            <!-- Vehicle Title and Image -->
+            <div class="title-and-image">
+                <img src="https://eu-wotp.wgcdn.co/dcont/tankopedia_images/gb28_bishop/gb28_bishop_icon.svg">
+                <h3>Bishop</h3>
+            </div>
+
+            <!-- Star Rating -->
+            <div class="star-rating">
+                <!-- Replace the following line with your star rating implementation -->
+                <span>⭐⭐⭐⭐⭐</span>
+            </div>
+        </div>
+
+        <!-- Button Container -->
+        <div class="button-container">
+            <a href="#" class="neon-button" onclick="showHistory()">History</a>
+            <a href="#" class="neon-button" onclick="showRating()">Rating</a>
+        </div>
+
+        <!-- White Boxes -->
+        <div id="historyBox" class="white-box">
+            <p>This is the history box content.</p>
+            <div class="close-button" onclick="hideHistory()">Close</div>
+        </div>
+
+        <div id="ratingBox" class="white-box">
+            <div class="evaluation-container">
+                <div class="evaluation-header">
+                    <h3>Choutca opinion:</h3>
+                    <p>The best light tank in the city thanks to autoloader. You can defend yourself and do trades. You can spot with it in the open maps as well.</p>
+                    <p>Updated on 2023/06</p>
+                </div>
+                <div class="evaluation-details">
+                    <div class="rating-category">
+                        <h3>Armour Effectiveness</h3>
+                        <div class="stars">★★☆☆☆</div>
+                    </div>
+                    <div class="rating-category">
+                        <h3>Beginner Friendliness</h3>
+                        <div class="stars">★★★★☆</div>
+                    </div>
+                    <div class="rating-category">
+                        <h3>Beginner dddddd</h3>
+                        <div class="stars">★★★★☆</div>
+                    </div>
+                    <!-- ... Repeat for other categories ... -->
+                </div>
+            </div>
+        
+            <div class="close-button" onclick="hideRating()">Close</div>
+        </div>
+    </div>
+
+    <script>
+        function showHistory() {
+            document.querySelector('.button-container').style.display = 'none';
+            document.getElementById('historyBox').style.display = 'block';
+        }
+
+        function hideHistory() {
+            document.querySelector('.button-container').style.display = 'flex';
+            document.getElementById('historyBox').style.display = 'none';
+        }
+
+        function showRating() {
+            document.querySelector('.button-container').style.display = 'none';
+            document.getElementById('ratingBox').style.display = 'block';
+        }
+
+        function hideRating() {
+            document.querySelector('.button-container').style.display = 'flex';
+            document.getElementById('ratingBox').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
