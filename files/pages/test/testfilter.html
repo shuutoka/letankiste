@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tank Selector</title>
+    <style>
+        /* Add your styles here */
+    </style>
+</head>
+<body>
+
+    <h1>Tank Selector</h1>
+
+    <label for="nation">Nation:</label>
+    <select id="nation">
+        <option value="">All</option>
+    </select>
+
+    <label for="tier">Tier:</label>
+    <select id="tier">
+        <option value="">All</option>
+    </select>
+
+    <label for="class">Class:</label>
+    <select id="class">
+        <option value="">All</option>
+    </select>
+
+    <label for="status">Status:</label>
+    <select id="status">
+        <option value="">All</option>
+    </select>
+
+    <div id="overview">
+        <!-- Tank overview will be displayed here -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        // CSV URL
+        const csvUrl = 'https://shuutoka.github.io/letankiste/files/tankiste-db.csv';
+
+        // Function to fetch and parse CSV data
+        function fetchTankData() {
+            return new Promise((resolve, reject) => {
+                Papa.parse(csvUrl, {
+                    download: true,
+                    header: true,
+                    complete: (result) => {
+                        resolve(result.data);
+                    },
+                    error: (error) => {
+                        reject(error);
+                    }
+                });
+            });
+        }
+
+        // Function to populate dropdown based on selected filter
+        function populateDropdown(data, property, dropdownId) {
+            const options = data.reduce((acc, tank) => {
+                const value = tank[property];
+                if (!acc.includes(value)) {
+                    acc.push(value);
+                }
+                return acc;
+            }, []);
+
+            const dropdown = $(`#${dropdownId}`);
+            dropdown.empty();
+            dropdown.append('<option value="">All</option>');
+
+            options.forEach(option => {
+                dropdown.append(`<option value="${option}">${option}</option>`);
+            });
+        }
+
+        // Function to update tank overview based on selected filters
+        function updateOverview() {
+            const selectedNation = $('#nation').val();
+            const selectedTier = $('#tier').val();
+            const selectedClass = $('#class').val();
+            const selectedStatus = $('#status').val();
+
+            const filteredTanks = tankData.filter(tank =>
+                (!selectedNation || tank.Nation === selectedNation) &&
+                (!selectedTier || tank.Tier === selectedTier) &&
+                (!selectedClass || tank.Class === selectedClass) &&
+                (!selectedStatus || tank.Statue === selectedStatus)
+            );
+
+            const overview = $('#overview');
+            overview.empty();
+
+            filteredTanks.forEach(tank => {
+                overview.append(`
+                    <div>
+                        <h2>${tank.name}</h2>
+                        <img src="${tank.icon}" alt="${tank.name} icon">
+                        <a href="${tank.URL}" target="_blank">Learn more</a>
+                    </div>
+                `);
+            });
+        }
+
+        // Event listeners for dropdown changes
+        $('#nation').change(function () {
+            populateDropdown(tankData, 'Tier', 'tier');
+            populateDropdown(tankData, 'Class', 'class');
+            populateDropdown(tankData, 'Statue', 'status');
+            updateOverview();
+        });
+
+        $('#tier, #class, #status').change(function () {
+            updateOverview();
+        });
+
+        // Fetch tank data and initialize dropdowns
+        let tankData;
+        fetchTankData().then(data => {
+            tankData = data;
+            populateDropdown(tankData, 'Nation', 'nation');
+            updateOverview();
+        }).catch(error => {
+            console.error('Error fetching tank data:', error);
+        });
+    </script>
+</body>
+</html>
