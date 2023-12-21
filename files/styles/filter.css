@@ -1,231 +1,249 @@
+/* Reset some default styles */
+body, h1, h2, h3, p, select, button {
+    margin: 0;
+    padding: 0;
+}
+
 body {
-            background-color: black;
-            color: cyan;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-        }
+    background-color: black;
+    color: cyan;
+    font-family: 'Arial', sans-serif;
+}
 
-        h1 {
-            text-align: center;
-        }
+h1 {
+    text-align: center;
+}
 
-        label {
-            display: inline-block;
-            margin-right: 10px;
-        }
+label {
+    display: inline-block;
+    margin-right: 10px;
+}
 
-        select {
-            width: 150px;
-            padding: 5px;
-            border: 1px solid cyan;
-            border-radius: 13px;
-            margin-bottom: 10px;
-            color: cyan;
-            background-color: black;
-        }
+select {
+    width: 150px;
+    padding: 5px;
+    border: 1px solid cyan;
+    border-radius: 13px;
+    margin-bottom: 10px;
+    color: cyan;
+    background-color: black;
+}
 
-        .overview-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
+.overview-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
 
-        .tank-card {
-            position: relative;
-            overflow: hidden;
-            margin: 10px;
-            border: 1px solid cyan;
-            border-radius: 13px;
-            margin: 10px; /* Add margin to give space around cards */
-            width: 200px; /* Set a fixed width for the cards */
-        }
+.tank-card {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+    border: 1px solid cyan;
+    border-radius: 13px;
+    width: 200px;
+    text-align: center;
+}
 
-        .tank-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            transition: .7s;
-        }
+.tank-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    transition: .7s;
+}
 
-        .tank-card:hover {
-            opacity: 1;
-            
-            border: none; /*remove the border*/
-                box-shadow: /*add a neon instead of the legacy border*/
-                    0 0 .2rem #fff,
-                    inset 0 0 .1rem #fff, /*offset brightness of neon, or in another word, the "glowing intensity"*/
-                    0 0 .9rem cyan, /*offset glowing*/
-                    inset 0 0 .2rem cyan;  /*glowing intensity*/
-        }
+.tank-card:hover {
+    opacity: 1;
+    border: none;
+    box-shadow:
+        0 0 .2rem #fff,
+        inset 0 0 .1rem #fff,
+        0 0 .9rem cyan,
+        inset 0 0 .2rem cyan;
+}
 
-        /* Change cursor to pointer on hover */
-        .tank-card:hover {
-            cursor: pointer;
-        }
+.tank-card:hover {
+    cursor: pointer;
+}
 
-        /* Additional styles for the tank card content */
-        .tank-card-content {
-            padding: 10px;
-            text-align: center;
-            color: cyan;
-        }
+.tank-card-content {
+    padding: 10px;
+    color: cyan;
+}
 
-        .tank-card img {
-            max-width: 100px;
-            max-height: 100px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
+.tank-card img {
+    max-width: 100px;
+    max-height: 100px;
+    margin-bottom: 10px;
+    object-fit: contain;
+}
 
-        /* Apply the animation styles for the card */
-        .tank-card:hover .tank-card-content {
-            background: cyan;
-            color: black;
-            box-shadow: 0 0 5px cyan, 0 0 25px cyan, 0 0 50px cyan, 0 0 200px cyan;
-        }
+.tank-card:hover .tank-card-content {
+    background: cyan;
+    color: black;
+    box-shadow: 0 0 5px cyan, 0 0 25px cyan, 0 0 50px cyan, 0 0 200px cyan;
+}
 
-        .tank-card:hover .tank-card-content a {
-            background: cyan;
-            color: black;
-            box-shadow: 0 0 5px cyan, 0 0 25px cyan, 0 0 50px cyan, 0 0 200px cyan;
-            -webkit-box-reflect: below 1px linear-gradient(transparent, #0005);
-        }
+.tank-card:hover .tank-card-content a {
+    background: cyan;
+    color: black;
+    box-shadow: 0 0 5px cyan, 0 0 25px cyan, 0 0 50px cyan, 0 0 200px cyan;
+    -webkit-box-reflect: below 1px linear-gradient(transparent, #0005);
+}
 
-        .tank-card-content a span {
-            position: absolute;
-            display: block;
-        }
+.tank-card-content a span {
+    position: absolute;
+    display: block;
+}
 
-        .tank-card-content a span:nth-child(1) {
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, cyan);
-            animation: animate1 1s linear infinite;
-        }
+.tank-card-content a span:nth-child(1) {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, cyan);
+    animation: animate1 1s linear infinite;
+}
 
-        @keyframes animate1 {
-            0% {
-                left: -100%;
-            }
-            50%, 100% {
-                left: 100%;
-            }
-        }
+@keyframes animate1 {
+    0% {
+        left: -100%;
+    }
+    50%, 100% {
+        left: 100%;
+    }
+}
 
-        .tank-card-content a span:nth-child(2) {
-            top: -100%;
-            right: 0;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(180deg, transparent, cyan);
-            animation: animate2 1s linear infinite;
-            animation-delay: 0.25s;
-        }
+.tank-card-content a span:nth-child(2) {
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, cyan);
+    animation: animate2 1s linear infinite;
+    animation-delay: 0.25s;
+}
 
-        @keyframes animate2 {
-            0% {
-                top: -100%;
-            }
-            50%, 100% {
-                top: 100%;
-            }
-        }
+@keyframes animate2 {
+    0% {
+        top: -100%;
+    }
+    50%, 100% {
+        top: 100%;
+    }
+}
 
-        .tank-card-content a span:nth-child(3) {
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(270deg, transparent, cyan);
-            animation: animate3 1s linear infinite;
-            animation-delay: 0.5s;
-        }
+.tank-card-content a span:nth-child(3) {
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, cyan);
+    animation: animate3 1s linear infinite;
+    animation-delay: 0.5s;
+}
 
-        @keyframes animate3 {
-            0% {
-                right: -100%;
-            }
-            50%, 100% {
-                right: 100%;
-            }
-        }
+@keyframes animate3 {
+    0% {
+        right: -100%;
+    }
+    50%, 100% {
+        right: 100%;
+    }
+}
 
-        .tank-card-content a span:nth-child(4) {
-            bottom: -100%;
-            left: 0;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(360deg, transparent, cyan);
-            animation: animate4 1s linear infinite;
-            animation-delay: 0.75s;
-        }
+.tank-card-content a span:nth-child(4) {
+    bottom: -100%;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(360deg, transparent, cyan);
+    animation: animate4 1s linear infinite;
+    animation-delay: 0.75s;
+}
 
-        @keyframes animate4 {
-            0% {
-                bottom: -100%;
-            }
-            50%, 100% {
-                bottom: 100%;
-            }
-        }
+@keyframes animate4 {
+    0% {
+        bottom: -100%;
+    }
+    50%, 100% {
+        bottom: 100%;
+    }
+}
 
-        #noResultsMessage {
-            text-align: center;
-            color: cyan;
-            margin-top: 20px;
-        }
+#noResultsMessage {
+    text-align: center;
+    color: cyan;
+    margin-top: 20px;
+}
 
-        a {
-            color: cyan;
-        }
+a {
+    color: cyan;
+}
 
-        a:hover {
-            text-decoration: underline;
-        }
+a:hover {
+    text-decoration: underline;
+}
 
-        /* Responsive Styles */
-        @media screen and (max-width: 600px) {
-            select {
-                width: 100%;
-            }
+/* Responsive Styles */
+@media screen and (max-width: 600px) {
+    select {
+        width: 100%;
+    }
 
-            label {
-                display: block;
-                margin-bottom: 5px;
-            }
-        }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
 
-        button {
-            padding: 8px 16px;
-            border: 1px solid cyan;
-            border-radius: 13px;
-            background-color: black;
-            color: cyan;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+    .tank-card {
+        width: 100%; /* Adjust card width for small screens */
+    }
 
-        .pagination {
-            text-align: center;
-            margin-top: 10px;
-        }
+    .tank-card-content {
+        padding: 10px;
+        color: cyan;
+        text-align: center;
+    }
 
-        .page-link {
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 0 5px;
-            border: 1px solid cyan;
-            border-radius: 13px;
-            color: cyan;
-            cursor: pointer;
-        }
+    .tank-card-content h2 {
+        display: none;
+    }
 
-        .page-link:hover {
-            background-color: cyan;
-            color: black;
-        }
+    .tank-card-content .tank-slug {
+        display: block;
+    }
+}
+
+button {
+    padding: 8px 16px;
+    border: 1px solid cyan;
+    border-radius: 13px;
+    background-color: black;
+    color: cyan;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: 1px solid cyan;
+    border-radius: 13px;
+    color: cyan;
+    cursor: pointer;
+}
+
+.page-link:hover {
+    background-color: cyan;
+    color: black;
+}
