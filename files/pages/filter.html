@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Le Tankiste - Tank Filter">
+    <meta property="og:description" content="Tank filter, search for a specific tank">
+    <meta property="og:image" content="https://shuutoka.github.io/letankiste/files/images/thumbnail/filter-logo.png">
+    <meta property="og:url" content="https://shuutoka.github.io/letankiste/index.html#">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="https://shuutoka.github.io/letankiste/files/styles/filter.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap">
+    <title>Le Tankiste - Tank Filter</title>
+</head>
+<body>
+
+    <h1>Tank Selector</h1>
+
+    <label for="nation">Nation:</label>
+    <select class="filter-dropdown" id="nation">
+        <option value="">All</option>
+    </select>
+
+    <label for="tier">Tier:</label>
+    <select class="filter-dropdown" id="tier">
+        <option value="">All</option>
+    </select>
+
+    <label for="class">Class:</label>
+    <select class="filter-dropdown" id="class">
+        <option value="">All</option>
+    </select>
+
+    <label for="status">Status:</label>
+    <select class="filter-dropdown" id="status">
+        <option value="">All</option>
+    </select>
+
+    <button id="resetButton">Reset</button>
+
+    <div class="overview-container" id="overview">
+        <!-- Tank overview will be displayed here -->
+    </div>
+
+    <div id="noResultsMessage"></div>
+
+    <div class="pagination" id="pagination"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        // CSV URL
+        const csvUrl = 'https://shuutoka.github.io/letankiste/files/tankiste-db.csv';
+        // Number of results per page
+        const resultsPerPage = 10;
+
+        // Function to fetch and parse CSV data
+        function fetchTankData() {
+            return new Promise((resolve, reject) => {
+                Papa.parse(csvUrl, {
+                    download: true,
+                    header: true,
+                    complete: (result) => {
+                        resolve(result.data);
+                    },
+                    error: (error) => {
+                        reject(error);
+                    }
+                });
+            });
+        }
+
+        // Function to populate dropdown based on selected filter
+        function populateDropdown(data, property, dropdownClass) {
+            const options = data.reduce((acc, tank) => {
+                const value = tank[property];
+                if (!acc.includes(value)) {
+                    acc.push(value);
+                }
+                return acc;
+            }, []);
+
+            const dropdown = $(`.${dropdownClass}`);
+            const selectedValue = dropdown.val(); // Preserve the selected value
+            dropdown.empty();
+            dropdown.append('<option value="">All</option>');
+
+            options.forEach(option => {
+                dropdown.append(`<option value="${option}">${option}</option>`);
+            });
+
+            // Set the preserved value if it exists
+            if (selectedValue) {
+                dropdown.val(selectedValue);
+            }
+        }
+
+        // Function to update tank overview based on selected filters and page number
+        function updateOverview(pageNumber) {
+            const selectedNation = $('.filter-dropdown#nation').val();
+            const selectedTier = $('.filter-dropdown#tier').val();
+            const selectedClass = $('.filter-dropdown#class').val();
+            const selectedStatus = $('.filter-dropdown#status').val();
+
+            const startIndex = (pageNumber - 1) * resultsPerPage;
+            const endIndex = startIndex + resultsPerPage;
+
+            const filteredTanks = tankData.filter(tank =>
+                (!selectedNation || tank.Nation === selectedNation) &&
+                (!selectedTier || tank.Tier === selectedTier) &&
+                (!selectedClass || tank.Class === selectedClass) &&
+                (!selectedStatus || tank.Statue === selectedStatus)
+            );
+
+            const paginatedTanks = filteredTanks.slice(startIndex, endIndex);
+
+            const overview = $('#overview');
+            overview.empty();
+
+            if (paginatedTanks.length === 0) {
+                $('#noResultsMessage').text('No tanks found or articles not ready yet.');
+            } else {
+                $('#noResultsMessage').text('');
+                paginatedTanks.forEach(tank => {
+                    const tankCard = $(`
+                        <div class="tank-card">
+                            <h2>${tank.name}</h2>
+                            <img src="${tank.icon}" alt="${tank.name} icon">
+                        </div>
+                    `);
+
+                    // Make the entire card clickable
+                    tankCard.click(() => {
+                        window.open(tank.URL, '_blank');
+                    });
+
+                    overview.append(tankCard);
+                });
+            }
+
+            // Update pagination controls
+            updatePaginationControls(filteredTanks.length, pageNumber);
+        }
+
+        // Function to update pagination controls
+        function updatePaginationControls(totalResults, currentPage) {
+            const totalPages = Math.ceil(totalResults / resultsPerPage);
+            const pagination = $('#pagination');
+            pagination.empty();
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLink = $(`<span class="page-link">${i}</span>`);
+                pageLink.click(() => updateOverview(i));
+                if (i === currentPage) {
+                    pageLink.addClass('active');
+                }
+                pagination.append(pageLink);
+            }
+        }
+
+        // Event listeners for dropdown changes
+        $('.filter-dropdown').change(function () {
+            const dropdownClass = $(this).attr('id');
+            populateDropdown(tankData, 'Tier', dropdownClass);
+            populateDropdown(tankData, 'Class', dropdownClass);
+            populateDropdown(tankData, 'Statue', dropdownClass);
+            updateOverview(1); // Reset to page 1 when filters change
+        });
+
+        // Reset button click event
+        $('#resetButton').click(function () {
+            // Reset all dropdowns to default
+            $('.filter-dropdown').val('');
+            // Repopulate dropdowns based on the default
+            populateDropdown(tankData, 'Tier', 'filter-dropdown#tier');
+            populateDropdown(tankData, 'Class', 'filter-dropdown#class');
+            populateDropdown(tankData, 'Statue', 'filter-dropdown#status');
+            updateOverview(1); // Reset to page 1 when reset button is clicked
+        });
+
+        // Fetch tank data and initialize dropdowns
+        let tankData;
+        fetchTankData().then(data => {
+            tankData = data;
+            populateDropdown(tankData, 'Nation', 'filter-dropdown#nation');
+            populateDropdown(tankData, 'Tier', 'filter-dropdown#tier');
+            populateDropdown(tankData, 'Class', 'filter-dropdown#class');
+            populateDropdown(tankData, 'Statue', 'filter-dropdown#status');
+            updateOverview(1); // Load page 1 initially
+        }).catch(error => {
+            console.error('Error fetching tank data:', error);
+        });
+    </script>
+</body>
+</html>
