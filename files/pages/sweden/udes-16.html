@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="UDES 16">
+    <meta property="og:description" content="Tanks information and history">
+    <meta property="og:image" content="files/images/thumbnail/udes-16.webp">
+    <meta property="og:url" content="https://shuutoka.github.io/letankiste/index.html#">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="https://shuutoka.github.io/letankiste/files/styles/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap">
+    <title>UDES 16</title>
+    <style>
+        /* Your existing styles here */
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            background: #000;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        .background {
+            text-align: center;
+        }
+
+        .vehicle-info {
+            display: inline-block;
+            text-align: left;
+        }
+
+        .title-and-image {
+            text-align: center;
+        }
+
+        .title-and-image img {
+            width: 70%; /* Adjusted to 70% of its original size */
+            max-width: 100%;
+        }
+
+        .star-rating {
+            text-align: center;
+            margin-top: 10px;
+            cursor: pointer; /* Add cursor pointer for interaction */
+        }
+
+        .pop-up {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: rgb(27, 27, 27);
+            border-radius: 10px;
+            border: 1px solid cyan;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .close-btn-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border: 2px solid red;
+            border-radius: 8px;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color:#000;            
+        }
+
+        .close-btn {
+            color: red;
+            font-size: 24px;
+        }
+
+        .close-btn-container:hover {
+            background-color: red;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 2px solid cyan;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer; /* Add cursor pointer for interaction */
+        }
+
+        .rating-cell{
+            transition:  0.5s ease-in-out;
+        }
+
+        .rating-cell:hover {
+            background: radial-gradient(rgba(0, 255, 229, 0.336), transparent 60%);
+            transition:  0.5s ease-in-out;
+        }
+
+        .white-box {
+            margin-top: 20px;
+            background: rgb(0, 0, 0);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid cyan;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            width: 80%;
+            margin: 20px auto; /* Center the white box */
+            position: relative;
+            z-index: 0;
+            margin-bottom: 20px;
+        }
+
+        .view-history-btn {
+            margin: 10px;
+            padding: 15px 30px;
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid cyan;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Le tankiste</h2>
+    </header>
+    
+    <div class="background">
+        <div class="vehicle-info">
+            <div class="title-and-image">
+                <img src="files/images/thumbnail/udes-16.webp" alt="UDES 16 Icon">
+                <h3>UDES 16</h3>
+            </div>
+            <div class="star-rating" onclick="showPopUp('Overall rating : Epic', 'The tank is very fun with is “ troll armour ” allowing you to easily block 3K dmg in hull down position. The tank have the “ magical ” suspension wich allow you to take weird position or climb thing you souldn`t.')">
+                <span class="star-container" title="Epic">⭐⭐⭐⭐⭐</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ratings Section -->
+    <div class="white-box" id="ratingsBox">
+        <h3>Ratings for UDES 16</h3>
+        <table>
+            <tr>
+                <th>Armour Effectiveness</th>
+                <th>Gun Handling</th>
+                <th>Speed / Mobility</th>
+                <th>Alpha</th>
+                <th>Gold</th>
+                <th>HE</th>
+                <th>Fun Meter</th>
+            </tr>
+            <!-- Replace the following row with dynamic data from your CSV file -->
+            <tr>
+                <td class="rating-cell" onclick="showPopUp('Armour Effectiveness', 'Lorem Ipsum content for Armour Effectiveness.')">⭐⭐☆☆☆</td>
+                <td class="rating-cell" onclick="showPopUp('Gun Handling', 'good gun, but bad at long distance. I`ll write something else here in the futur')">⭐⭐⭐⭐☆</td>
+                <td class="rating-cell" onclick="showPopUp('Speed / Mobility', 'Lorem Ipsum content for Speed / Mobility.')">⭐⭐⭐⭐⭐</td>
+                <td class="rating-cell" onclick="showPopUp('Alpha', 'Lorem Ipsum content for Alpha.')">⭐⭐⭐⭐☆</td>
+                <td class="rating-cell" onclick="showPopUp('Gold', 'Lorem Ipsum content for Gold.')">⭐⭐⭐☆☆</td>
+                <td class="rating-cell" onclick="showPopUp('HE', 'Lorem Ipsum content for HE.')">⭐⭐☆☆☆</td>
+                <td class="rating-cell" onclick="showPopUp('Fun Meter', 'Lorem Ipsum content for Fun Meter.')"><img src="https://shuutoka.github.io/letankiste/files/images/funmeter/fun-5-8.webp" alt="Fun Meter" style="width: 70%;"></td>
+            </tr>
+        </table>
+        <button class="view-history-btn" onclick="toggleView()">View History</button>
+    </div>
+
+    <!-- Article Section (Hidden by default) -->
+    <div class="white-box" id="articleBox" style="display: none;">
+        <h3>History of AMX 13 105</h3>
+        <!-- Placeholder text (Lorem Ipsum) for the article -->
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <button class="view-history-btn" onclick="toggleView()">View Rating</button>
+    </div>
+
+    <!-- Pop-up -->
+    <div id="popUp" class="pop-up">
+        <div class="close-btn-container" onclick="closePopUp()" onmouseover="this.style.backgroundColor='red'" onmouseout="this.style.backgroundColor=''">
+            <div class="close-btn">X</div>
+        </div>
+        <p id="ratingTitle" style="font-weight: bold;"></p>
+        <p id="popUpContent">Lorem Ipsum content.</p>
+    </div>
+
+    <script>
+        function showPopUp(title, content) {
+            document.getElementById("ratingTitle").innerText = title;
+            document.getElementById("popUpContent").innerText = content;
+            document.getElementById("popUp").style.display = "block";
+        }
+
+        function closePopUp() {
+            document.getElementById("popUp").style.display = "none";
+        }
+
+        function toggleView() {
+            var ratingsBox = document.getElementById("ratingsBox");
+            var articleBox = document.getElementById("articleBox");
+            var viewHistoryBtn = document.querySelector(".view-history-btn");
+
+            if (ratingsBox.style.display === "none") {
+                ratingsBox.style.display = "block";
+                articleBox.style.display = "none";
+                viewHistoryBtn.innerText = "View History";
+            } else {
+                ratingsBox.style.display = "none";
+                articleBox.style.display = "block";
+                viewHistoryBtn.innerText = "View Rating";
+            }
+        }
+    </script>
+</body>
+</html>
