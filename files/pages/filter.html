@@ -131,7 +131,7 @@
 
                     // Make the entire card clickable
                     tankCard.click(() => {
-                        window.open(tank.URL, '_blank');
+                         window.location.href = tank.URL; // Redirect to the tank URL
                     });
 
                     overview.append(tankCard);
